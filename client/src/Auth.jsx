@@ -14,16 +14,20 @@ const AuthPage = ({ mode, onLoginSuccess }) => {
         const res = await axios.post('http://localhost:5000/api/auth/google', { 
           access_token: tokenResponse.access_token 
         });
+        
         localStorage.setItem('token', res.data.token);
         onLoginSuccess(res.data.user);
         
-        if (!res.data.user.isProfileComplete) navigate('/setup');
-        else navigate('/');
+        if (!res.data.user.isProfileComplete) {
+          navigate('/setup');
+        } else {
+          navigate('/');
+        }
       } catch (err) { 
         console.error("Login Error:", err); 
       }
     },
-    onError: () => console.log('Login Failed'),
+    onError: (error) => console.log('Login Failed:', error),
   });
 
   return (
@@ -37,22 +41,22 @@ const AuthPage = ({ mode, onLoginSuccess }) => {
           <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" className="w-full opacity-70" alt="placeholder" />
         </div>
 
-        <h2 className="text-2xl mb-8 text-center leading-tight tracking-wider">
+        <h2 className="text-xl font-black mb-8 text-center uppercase leading-tight">
           {mode === 'login' ? (
-            <>Login to your account <br/> <span className="text-lg opacity-50">Welcome back!</span></>
+            <>signin to your account <br/> <span className="text-xs font-bold opacity-50">if already have an account signin</span></>
           ) : (
-            <>Create your account <br/> <span className="text-xs font-bold opacity-50">Join us today</span></>
+            <>create your account <br/> <span className="text-xs font-bold opacity-50">join the arena today</span></>
           )}
         </h2>
 
         <button 
           onClick={() => login()}
-          className="flex items-center gap-3 border-2 border-grey-500 rounded-lg px-12 py-2 bg-white text-grey-300 active:border-transparent transition-all duration-700 "
+          className="flex items-center gap-3 border-2 border-grey-500 rounded-lg px-12 py-2 bg-white text-grey-300 active:border-transparent transition-all duration-700 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
         >
           <img 
             src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" 
             alt="G" 
-            className="w-10 h-10" 
+            className="w-8 h-8" 
           />
           {mode === 'login' ? 'Sign in with Google' : 'Sign up with Google'}
         </button>

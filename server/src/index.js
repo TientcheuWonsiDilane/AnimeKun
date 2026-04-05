@@ -1,10 +1,11 @@
 require('dotenv').config(); 
 const express = require('express');
 const cors = require('cors');
-const axios = require('axios');
+const axios = require('axios'); 
 const connectDB = require('./config/db.js');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
+const User = require('./models/User'); 
 
 const app = express();
 app.use(cors());
@@ -22,18 +23,28 @@ app.post('/api/auth/google', async (req, res) => {
   }
 
   try {
-    const googleResponse = await axios.get(
-      `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
-    );
+    const googleResponse = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { 
+        Authorization: `Bearer ${access_token}` 
+      }
+    });
 
     const { email, name, picture } = googleResponse.data;
 
-    const user = {
-      email,
-      username: name,
-      avatar: picture,
-      isProfileComplete: false
-    };
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = new User({
+        email,
+        username: name,
+        avatar: picture,
+        isProfileComplete: false
+      });
+      await user.save();
+      console.log(`New user registered: ${email}`);
+    } else {
+      console.log(`Returning user logged in: ${email}`);
+    }
 
     const token = jwt.sign(
       { email: user.email }, 
@@ -41,11 +52,9 @@ app.post('/api/auth/google', async (req, res) => {
       { expiresIn: '1d' }
     );
 
-    console.log(`User ${email} authenticated successfully.`);
     res.status(200).json({ token, user });
-
   } catch (error) {
-    console.error("Google Token Validation Failed:", error.response?.data || error.message);
+    console.error("Google Auth Error:", error.response?.data || error.message);
     res.status(401).json({ message: "Invalid Google Access Token" });
   }
 });
@@ -67,22 +76,24 @@ app.put('/api/auth/update-profile', authenticateToken, async (req, res) => {
   const { username, avatar } = req.body;
   
   try {
-    const updatedUser = {
-      email: req.user.email,
-      username: username,
-      avatar: avatar,
-      isProfileComplete: true
-    };
+    const user = await User.findOneAndUpdate(
+      { email: req.user.email },
+      { 
+        username: username, 
+        avatar: avatar, 
+        isProfileComplete: true 
+      },
+      { new: true }
+    );
 
-    console.log("Profile updated for:", req.user.email);
-   
-    res.status(200).json(updatedUser);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    console.log("Profile updated for:", user.email);
+    res.status(200).json(user);
   } catch (error) {
-    console.error("Update Error:", error);
-    res.status(500).json({ message: "Server error during update" });
+    res.status(500).json({ message: "Update failed" });
   }
 });
-
 
 const JIKAN_URL = "https://api.jikan.moe/v4";
 

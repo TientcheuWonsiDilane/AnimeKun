@@ -116,5 +116,56 @@ app.get('/api/anime/search', async (req, res) => {
     }
 });
 
+app.post('/api/user/toggle-list', authenticateToken, async (req, res) => {
+  const { anime, listType } = req.body;
+  const userEmail = req.user.email;
+
+  if (!['watchlist', 'favorites'].includes(listType)) {
+    return res.status(400).json({ message: "Invalid list type" });
+  }
+
+  try {
+    const user = await User.findOne({ email: userEmail });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const index = user[listType].findIndex(item => item.mal_id === anime.mal_id);
+
+    if (index > -1) {
+      user[listType].splice(index, 1);
+    } else {
+      user[listType].push({
+        mal_id: anime.mal_id,
+        title: anime.title,
+        image_url: anime.images.jpg.large_image_url
+      });
+    }
+
+    await user.save();
+    res.status(200).json({ message: "List updated", data: user[listType] });
+  } catch (error) {
+    res.status(500).json({ message: "Server error updating list" });
+  }
+});
+
+app.get('/api/user/profile', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.user.email });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching profile" });
+  }
+});
+
+app.post('/api/user/toggle-watched', authenticateToken, async (req, res) => {
+  const { animeId } = req.body;
+  try {
+    const user = await User.findOne({ email: req.user.email });
+    const item = user.watchlist.find(i => i.mal_id === animeId);
+    if (item) item.watched = !item.watched;
+    await user.save();
+    res.status(200).json({ data: user.watchlist });
+  } catch (err) { res.status(500).send(err); }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

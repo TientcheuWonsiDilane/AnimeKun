@@ -9,9 +9,24 @@ import AuthPage from './Auth.jsx';
 import ProfileSetup from './profileSet.jsx';
 import Dashboard from './dashboard.jsx';
 
+
+
 const App = () => {
   const [user, setUser] = useState(null);
   const [globalSearchTerm, setGlobalSearchTerm] = useState("");
+
+  useEffect(() => {
+  const token = localStorage.getItem('token');
+  if (token && !user) {
+    axios.get('http://localhost:5000/api/user/profile', {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(res => {
+      setUser(res.data);
+    }).catch(() => {
+      localStorage.removeItem('token');
+    });
+  }
+}, []);
 
   const handleLoginSuccess = (userData) => {
     setUser(userData);
@@ -33,8 +48,8 @@ const App = () => {
             <Header user={user} onSearchTrigger={handleGlobalSearch} />
             <Routes>
               <Route path="/" element={<HomePage searchTermFromHeader={globalSearchTerm} />} />
-              <Route path="/anime/:id" element={<AnimeDetail />} />
-              <Route path="/dashboard" element={<Dashboard user={user} />} />
+              <Route path="/anime/:id" element={<AnimeDetail user={user} setUser={setUser} />} />
+              <Route path="/dashboard" element={<Dashboard user={user} setUser={setUser} />} />
             </Routes>
             <Footer />
           </>

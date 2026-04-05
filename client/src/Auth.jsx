@@ -32,7 +32,7 @@ const AuthPage = ({ mode, onLoginSuccess }) => {
 
   return (
     <div className="flex h-screen w-full font-['Poppins']">
-      <div className="w-full lg:w-[25%] h-full bg-white flex flex-col justify-center items-center p-5 relative shadow-[4px_0px_8px_8px_rgba(0,0,0,1)]">
+      <div className="w-full lg lg:w-[25%] h-full bg-white flex flex-col justify-center items-center p-5 relative shadow-[4px_0px_8px_8px_rgba(0,0,0,1)]">
         <Link to="/" className="absolute top-8 left-8 uppercase border-b-2 border-black rounded-sm hover:border-transparent transition-all duration-700 px-2">← Home</Link>
         
         <img src={logo} className="w-128 mb-3" alt="Logo" />
@@ -41,17 +41,17 @@ const AuthPage = ({ mode, onLoginSuccess }) => {
           <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" className="w-full opacity-70" alt="placeholder" />
         </div>
 
-        <h2 className="text-xl font-black mb-8 text-center uppercase leading-tight">
+        <h2 className="text-2xl mb-8 text-center tracking-wider  leading-tight">
           {mode === 'login' ? (
-            <>signin to your account <br/> <span className="text-xs font-bold opacity-50">if already have an account signin</span></>
+            <>signin to your account <br/> <span className="text-[0.75rem] opacity-50">if already have an account signin</span></>
           ) : (
-            <>create your account <br/> <span className="text-xs font-bold opacity-50">join the arena today</span></>
+            <>create your account <br/> <span className="text-[0.75rem] opacity-50">join ustoday</span></>
           )}
         </h2>
 
         <button 
           onClick={() => login()}
-          className="flex items-center gap-3 border-2 border-grey-500 rounded-lg px-12 py-2 bg-white text-grey-300 active:border-transparent transition-all duration-700 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+          className="flex items-center gap-3 border-2 border-grey-500 rounded-lg cursor-pointer px-12 py-2 bg-white text-grey-300 active:shadow-none transition-all duration-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
         >
           <img 
             src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" 

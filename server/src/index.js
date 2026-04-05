@@ -1,6 +1,7 @@
 require('dotenv').config(); 
 const express = require('express');
 const cors = require('cors');
+const axios = require('axios');
 const connectDB = require('./config/db.js');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
@@ -14,23 +15,40 @@ connectDB();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 app.post('/api/auth/google', async (req, res) => {
-  const { idToken } = req.body;
-  try {
-    const ticket = await client.verifyIdToken({
-      idToken,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-    const { email, name, picture } = ticket.getPayload();
+  const { access_token } = req.body;
 
-    res.status(200).json({ 
-      token: jwt.sign({ email }, process.env.JWT_SECRET),
-      user: { email, username: name, avatar: picture, isProfileComplete: false }
-    });
-  } catch (error) {
-    res.status(401).json({ message: "Auth Failed" });
+  if (!access_token) {
+    return res.status(400).json({ message: "Access token is required" });
   }
-}); 
 
+  try {
+    const googleResponse = await axios.get(
+      `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
+    );
+
+    const { email, name, picture } = googleResponse.data;
+
+    const user = {
+      email,
+      username: name,
+      avatar: picture,
+      isProfileComplete: false
+    };
+
+    const token = jwt.sign(
+      { email: user.email }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: '1d' }
+    );
+
+    console.log(`User ${email} authenticated successfully.`);
+    res.status(200).json({ token, user });
+
+  } catch (error) {
+    console.error("Google Token Validation Failed:", error.response?.data || error.message);
+    res.status(401).json({ message: "Invalid Google Access Token" });
+  }
+});
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];

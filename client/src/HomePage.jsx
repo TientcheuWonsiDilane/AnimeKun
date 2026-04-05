@@ -114,7 +114,7 @@ useEffect(() => {
       </section>
 
       <section className="w-[90%] md:w-4/5 mx-auto py-16">
-        <h1 className="font-['Kanit'] text-4xl font-black text-center border-b-2 border-black pb-4 mb-12 uppercase tracking-wider">Animes of the Season</h1>
+        <h1 className="font-['Kanit'] text-2xl lg:text-4xl font-black text-center border-b-2 border-black pb-2 mb-12 uppercase tracking-wider">Animes of the Season</h1>
         <div className="mb-10 flex flex-wrap justify-center gap-4">
           <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} className="bg-white border-1 border-black px-6 py-2 font-bold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
             {[2026, 2025, 2024, 2023].map(year => <option key={year} value={year}>{year}</option>)}
@@ -144,8 +144,8 @@ useEffect(() => {
         </div>
       </section>
 
-      <section id="explore-section" className="w-full py-16 px-6 md:px-16 bg-gray-50 border-t-2 border-black">
-        <h1 className="font-['Kanit'] text-2xl lg:text-4xl font-black text-center mb-12 uppercase tracking-wider border-b-4 border-black inline-block">Explore and Discover New Animes</h1>
+      <section id="explore-section" className="w-full py-16 px-6 md:px-16 bg-gray-50 ">
+        <h1 className="font-['Kanit'] text-2xl lg:text-4xl font-black text-center mb-12 uppercase tracking-wider border-b-2 border-black pb-2">Explore and Discover New Animes</h1>
         <div className="flex flex-col lg:flex-row justify-between items-center gap-8 mb-16">
           <input type="text" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full focus:outline-none lg:max-w-xl bg-white border-1 border-black rounded-full px-6 py-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" />
           <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
@@ -166,7 +166,7 @@ useEffect(() => {
           ))}
         </div>
         <div className="mt-16 flex justify-center">
-          <button onClick={handleLoadMore} className="bg-black text-white px-10 py-4 font-black uppercase shadow-[6px_6px_0px_0px_rgba(255,255,255,1)] hover:bg-white hover:text-black border-2 border-black transition-all">Load More Results</button>
+          <button onClick={handleLoadMore} className="bg-black text-white px-6 py-3 rounded-lg text-[1rem] lg:text-lg font-black uppercase shadow-[6px_6px_0px_0px_rgba(255,255,255,1)] hover:bg-white hover:text-black active:bg-black active:opacity-75 border-2 border-black transition-all duration-600">Load More Results</button>
         </div>
       </section>
     </div>

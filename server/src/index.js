@@ -6,6 +6,8 @@ const connectDB = require('./config/db.js');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User'); 
+const Post = require('./models/Post');
+const mongoose = require('mongoose');
 
 const app = express();
 app.use(cors());
@@ -41,13 +43,11 @@ app.post('/api/auth/google', async (req, res) => {
         isProfileComplete: false
       });
       await user.save();
-      console.log(`New user registered: ${email}`);
-    } else {
-      console.log(`Returning user logged in: ${email}`);
     }
 
+    // FIX: Include _id in the token payload
     const token = jwt.sign(
-      { email: user.email }, 
+      { email: user.email, _id: user._id }, 
       process.env.JWT_SECRET, 
       { expiresIn: '1d' }
     );
@@ -65,9 +65,9 @@ const authenticateToken = (req, res, next) => {
 
   if (!token) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.sendStatus(403);
-    req.user = user;
+    req.user = decoded;
     next();
   });
 };
@@ -87,8 +87,6 @@ app.put('/api/auth/update-profile', authenticateToken, async (req, res) => {
     );
 
     if (!user) return res.status(404).json({ message: "User not found" });
-
-    console.log("Profile updated for:", user.email);
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: "Update failed" });
@@ -165,6 +163,127 @@ app.post('/api/user/toggle-watched', authenticateToken, async (req, res) => {
     await user.save();
     res.status(200).json({ data: user.watchlist });
   } catch (err) { res.status(500).send(err); }
+});
+
+app.get('/api/posts', async (req, res) => {
+  const { q, tag, anime, author } = req.query;
+  let query = {};
+  if (q) query.title = { $regex: q, $options: 'i' };
+  if (tag) query.tags = tag;
+  if (anime) query.animeReference = anime;
+  if (author) query.author = author;
+
+  try {
+    const posts = await Post.find(query)
+      .populate('author', 'username avatar')
+      .populate('comments.user', 'username avatar')
+      .sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (err) { res.status(500).send(err); }
+});
+
+app.post('/api/posts', authenticateToken, async (req, res) => {
+  try {
+    const newPost = new Post({ ...req.body, author: req.user._id });
+    await newPost.save();
+    res.status(201).json(newPost);
+  } catch (err) { res.status(500).send(err); }
+});
+
+app.post('/api/posts/:id/react', authenticateToken, async (req, res) => {
+  const { type } = req.body; 
+  try {
+    const post = await Post.findById(req.params.id);
+    const hasReacted = post[type].includes(req.user._id);
+
+    if (hasReacted) {
+      post[type] = post[type].filter(id => id.toString() !== req.user._id.toString());
+    } else {
+      post[type].push(req.user._id);
+      const opposite = type === 'likes' ? 'dislikes' : 'likes';
+      post[opposite] = post[opposite].filter(id => id.toString() !== req.user._id.toString());
+    }
+    await post.save();
+    res.json(post);
+  } catch (err) { res.status(500).send(err); }
+});
+
+app.get('/api/posts/my-posts', authenticateToken, async (req, res) => {
+  try {
+    const posts = await Post.find({ author: req.user._id }).sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (err) {
+    res.status(500).json({ message: "Server error fetching posts" });
+  }
+});
+
+app.put('/api/posts/:id', authenticateToken, async (req, res) => {
+  try {
+    const { _id, author, ...updateData } = req.body;
+    const post = await Post.findOneAndUpdate(
+      { 
+        _id: req.params.id, 
+        author: new mongoose.Types.ObjectId(req.user._id) 
+      },
+      { $set: updateData },
+      { new: true }
+    );
+
+    if (!post) return res.status(404).json({ message: "Post not found or unauthorized" });
+    res.json(post);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.delete('/api/posts/:id', authenticateToken, async (req, res) => {
+  try {
+    const result = await Post.findOneAndDelete({ 
+      _id: req.params.id, 
+      author: new mongoose.Types.ObjectId(req.user._id) 
+    });
+
+    if (!result) {
+      return res.status(404).json({ message: "Post not found or unauthorized" });
+    }
+    res.json({ message: "Deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get('/api/posts/:id', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id)
+      .populate('author', 'username avatar')
+      .populate('comments.user', 'username avatar')
+      .populate('comments.replies.user', 'username avatar');
+    if (!post) return res.status(404).json({ message: "Post not found" });
+    res.json(post);
+  } catch (err) { res.status(500).json(err); }
+});
+
+app.post('/api/posts/:id/comments', authenticateToken, async (req, res) => {
+  const { text, parentCommentId } = req.body;
+  try {
+    const post = await Post.findById(req.params.id);
+    const user = await User.findOne({ email: req.user.email });
+
+    if (parentCommentId) {
+      const comment = post.comments.id(parentCommentId);
+      comment.replies.push({ user: user._id, text });
+    } else {
+      post.comments.push({ user: user._id, text });
+    }
+
+    await post.save();
+    const updatedPost = await Post.findById(req.params.id)
+      .populate('author', 'username avatar')
+      .populate('comments.user', 'username avatar')
+      .populate('comments.replies.user', 'username avatar');
+    
+    res.json(updatedPost);
+  } catch (err) { res.status(500).json(err); }
 });
 
 const PORT = process.env.PORT || 5000;

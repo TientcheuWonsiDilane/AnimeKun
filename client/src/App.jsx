@@ -8,6 +8,8 @@ import HomePage from './HomePage.jsx';
 import AuthPage from './Auth.jsx';
 import ProfileSetup from './profileSet.jsx';
 import Dashboard from './dashboard.jsx';
+import Community from './Community.jsx';
+import PostDetails from './PostDetails.jsx';
 
 
 
@@ -48,6 +50,8 @@ const App = () => {
             <Header user={user} onSearchTrigger={handleGlobalSearch} />
             <Routes>
               <Route path="/" element={<HomePage searchTermFromHeader={globalSearchTerm} />} />
+              <Route path="/community" element={<Community user={user} />} />
+              <Route path="/post/:id" element={<PostDetails currentUser={user} />} />
               <Route path="/anime/:id" element={<AnimeDetail user={user} setUser={setUser} />} />
               <Route path="/dashboard" element={<Dashboard user={user} setUser={setUser} />} />
             </Routes>

@@ -40,7 +40,7 @@ const Header = ({ user, onSearchTrigger }) => {
           <li><Link to="/" className="ml-8 px-2 font-semibold text-sm uppercase tracking-widest text-black border-b-2 border-black hover:border-transparent active:border-transparent transition-all duration-700 rounded-sm">Home</Link></li>
           {user && <li><Link to="/dashboard" className="ml-8 px-2 font-semibold text-sm uppercase tracking-widest text-black border-b-2 border-black hover:border-transparent active:border-transparent transition-all duration-700 rounded-sm">Dashboard</Link></li>}
           <li><a href="#vote" className="ml-8 px-2 font-semibold text-sm uppercase tracking-widest text-black border-b-2 border-black hover:border-transparent active:border-transparent transition-all duration-700 rounded-sm">Vote</a></li>
-          <li><a href="#community" className="ml-8 px-2 font-semibold text-sm uppercase tracking-widest text-black border-b-2 border-black hover:border-transparent active:border-transparent transition-all duration-700 rounded-sm">Community</a></li>
+          <li><Link to="/community" className="ml-8 px-2 font-semibold text-sm uppercase tracking-widest text-black border-b-2 border-black hover:border-transparent active:border-transparent transition-all duration-700 rounded-sm">Community</Link></li>
         </ul>
       </nav>
 
@@ -49,8 +49,8 @@ const Header = ({ user, onSearchTrigger }) => {
           <img src={user.avatar} alt="profile" className="w-10 h-10 rounded-full border-2 border-black object-cover" />
         ) : (
           <>
-            <Link to="/login" className="bg-black text-white px-4 py-1.5 rounded-md text-xs font-bold uppercase hover:opacity-60 transition-opacity duration-400">Login</Link>
-            <Link to="/signup" className="bg-black text-white px-4 py-1.5 rounded-md text-xs font-bold uppercase hover:opacity-60 transition-opacity duration-400">Sign Up</Link>
+            <Link to="/login" className="bg-black text-white px-4 py-1.5 rounded-md text-xs font-bold hover:opacity-60 transition-opacity duration-400">Login</Link>
+            <Link to="/signup" className="bg-black text-white px-4 py-1.5 rounded-md text-xs font-bold hover:opacity-60 transition-opacity duration-400">Sign Up</Link>
           </>
         )}
       </div>
@@ -64,11 +64,13 @@ const Header = ({ user, onSearchTrigger }) => {
           <input type="text" placeholder="Search..." className="bg-gray-100 border rounded-full px-6 py-2 w-4/5" value={localSearch} onChange={(e) => setLocalSearch(e.target.value)} onKeyDown={handleSearchSubmit} />
           <Link to="/" className="font-bold uppercase border-b-2 border-black rounded px-17 hover:bg-grey-200">Home</Link>
           {user && <Link to="/dashboard" className="font-bold uppercase border-b-2 border-black rounded px-12 hover:bg-grey-200">Dashboard</Link>}
+          <Link to="/community" className="font-bold uppercase border-b-2 border-black rounded px-12 hover:bg-grey-200">Community</Link>
+
           <div className="flex flex-col w-4/5 gap-3">
             {!user && (
               <>
-                <Link to="/login" className="bg-black text-white py-3 rounded-md font-bold text-center uppercase">Login</Link>
-                <Link to="/signup" className="bg-black text-white py-3 rounded-md font-bold text-center uppercase">Sign Up</Link>
+                <Link to="/login" className="bg-black text-white py-3 rounded-md font-bold text-center">Login</Link>
+                <Link to="/signup" className="bg-black text-white py-3 rounded-md font-bold text-center">Sign Up</Link>
               </>
             )}
           </div>

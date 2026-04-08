@@ -6,7 +6,7 @@ const connectDB = require('./config/db.js');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User'); 
-const Post = require('./Post.js');
+const Post = require('./models/Post.js');
 const Anime = require('./models/Anime');
 const mongoose = require('mongoose');
 

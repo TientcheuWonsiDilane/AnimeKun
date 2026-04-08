@@ -6,7 +6,8 @@ const connectDB = require('./config/db.js');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User'); 
-const Post = require('./models/Post');
+const Post = require('./Post.js');
+const Anime = require('./models/Anime');
 const mongoose = require('mongoose');
 
 const app = express();
@@ -166,20 +167,27 @@ app.post('/api/user/toggle-watched', authenticateToken, async (req, res) => {
 });
 
 app.get('/api/posts', async (req, res) => {
-  const { q, tag, anime, author } = req.query;
+const { q } = req.query;
   let query = {};
-  if (q) query.title = { $regex: q, $options: 'i' };
-  if (tag) query.tags = tag;
-  if (anime) query.animeReference = anime;
-  if (author) query.author = author;
 
-  try {
+  if (q) {
+    const safeSearch = q.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = { $regex: safeSearch, $options: 'i' };
+
+    query.$or = [
+      { title: regex },
+      { content: regex },
+      { tags: regex },       
+      { animeReference: regex }    ];
+  }
+ try {
     const posts = await Post.find(query)
       .populate('author', 'username avatar')
-      .populate('comments.user', 'username avatar')
       .sort({ createdAt: -1 });
     res.json(posts);
-  } catch (err) { res.status(500).send(err); }
+  } catch (err) { 
+    res.status(500).json({ error: err.message }); 
+  }
 });
 
 app.post('/api/posts', authenticateToken, async (req, res) => {
@@ -285,6 +293,59 @@ app.post('/api/posts/:id/comments', authenticateToken, async (req, res) => {
     res.json(updatedPost);
   } catch (err) { res.status(500).json(err); }
 });
+
+
+
+
+app.get('/category/:categoryId', async (req, res) => {
+  try {
+    const animes = await Anime.find({ category: req.params.categoryId })
+      .sort({ votes: -1 });
+    res.json(animes);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
+const voteRoutes = express.Router();
+
+voteRoutes.get('/votes/:categoryId', async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const votesData = await Anime.find({ category: categoryId }).select('id votes -_id'); 
+    res.json(votesData);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching votes" });
+  }
+});
+
+voteRoutes.post('/vote', async (req, res) => {
+  const { animeId, categoryId } = req.body;
+  try {
+    const anime = await Anime.findOne({ id: animeId, category: categoryId });
+    if (!anime) return res.status(404).json({ message: "Anime not found" });
+
+    anime.votes += 100;
+    await anime.save();
+
+    res.json({ success: true, newVotes: anime.votes });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+app.get('/api/all-votes', async (req, res) => {
+  try {
+    const allAnimes = await Anime.find({})
+      .select('id votes category -_id'); 
+    res.json(allAnimes);
+  } catch (err) {
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+app.use('/api', voteRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -12,8 +12,9 @@ const Community = ({ user }) => {
     setPosts(res.data);
   };
 
-  useEffect(() => { fetchPosts(); }, [search]);
-
+  useEffect(() => {
+  fetchPosts();
+}, []);
   const handleReact = async (postId, type) => {
     try {
       await axios.post(`http://localhost:5000/api/posts/${postId}/react`, { type }, {
@@ -33,10 +34,15 @@ const Community = ({ user }) => {
             placeholder="Search author, posts, anime, or tags..."
             className="w-full outline-none"
             onChange={(e) => setSearch(e.target.value)}
+  onKeyDown={(e) => {
+    if (e.key === 'Enter') {
+      fetchPosts();
+    }
+  }}
           />
         </div>
 
-<div className="mb-8 rounded-lg p-8 bg-white border-[2px] border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden group">
+<div className="mb-8 rounded-lg p-8 bg-white border-[2px] border-black shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden group">
   <div className="absolute top-0 right-0 w-28 h-28 bg-yellow-400/20 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-blue-400/20 transition-colors duration-500"></div>
 
   <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -67,13 +73,13 @@ const Community = ({ user }) => {
   </div>
 </div>
 
-        <div className="space-y-4">
+        <div className="space-y-5">
           {posts.map((post) => (
             <div
               key={post._id}
-              className="bg-[#fff] border-2 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] rounded-xl overflow-hidden"
+              className="bg-[#fff] border-2 max-h-[100vh] md: max-h-[120vh] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-xl overflow-hidden"
             >
-              <div className="p-2 flex items-center gap-3 border-b-2 border-black">
+              <div className="p-2 flex items-center gap-3 ">
                 <img
                   src={post.author.avatar}
                   className="w-12 h-12 p-0.5 rounded-full border-2 border-black object-cover"
@@ -88,31 +94,35 @@ const Community = ({ user }) => {
                   </p>
                 </div>
               </div>
-              <Link to={`/post/${post._id}`}> {
-              <div
-                className={`pt-2 transition-all duration-300 ${!post.image ? "bg-black h-[200px] flex flex-col justify-center align-center border-b-2 border-black" : ""}`}
-              >
-                <h2
-                  className={`font-bold  mb-1 text-[1rem] tracking-wide px-3 sm:text-[xl] ${!post.image ? "text-white text-2xl text-center mb-4" : "text-black"}`}
-                >
-                  {post.title}
-                </h2>
-                {(!post.image) && (
-                  <p
-                    className={`text-[1rem] mb-2 leading-relaxed px-3 line-clamp-3 ${!post.image ? "text-gray-300 text-center" : "text-gray-700"}`}
-                  >
-                    {post.content}
-                  </p>
-                )}
-              
-                {post.image && (
-                  <img
-                    src={post.image}
-                    className="w-full h-full object-cover order-2 border-t-1 border-black"
-                    alt={post.title}
-                  />
-                )}
-              </div> }</Link>
+             <Link to={`/post/${post._id}`}>
+  <div
+    className={`pt-2 transition-all duration-500 ${!post.image ? "bg-black h-[200px] md:h-[400px] flex flex-col justify-center align-center border-b-2 border-black" : ""}`}
+  >
+    <h2
+      className={`font-bold mb-1 lg:text-2xl tracking-wide px-3 text-xl ${!post.image ? "text-white text-2xl text-center mb-4" : "text-black"}`}
+    >
+      {post.title}
+    </h2>
+    {!post.image && (
+      <p
+        className={`text-[1rem] mb-2 leading-relaxed px-3 line-clamp-3 ${!post.image ? "text-gray-300 text-center" : "text-gray-700"}`}
+      >
+        {post.content}
+      </p>
+    )}
+
+    {post.image && (
+      <div className="w-full h-[400px] md:h-[600px] bg-black flex items-center justify-center border-t-2 border-black overflow-hidden">
+        <img
+          loading="lazy"
+          src={post.image}
+          className="w-full h-full object-contain"
+          alt={post.title}
+        />
+      </div>
+    )}
+  </div>
+</Link>
 
               <div className="p-4 bg-[#fff] border-t-3 border-black flex gap-6">
                 <button

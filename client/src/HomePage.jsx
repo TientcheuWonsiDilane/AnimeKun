@@ -78,7 +78,7 @@ useEffect(() => {
   const tracker = setTimeout(() => {
     setPage(1);
     fetchExploreAnime(searchTerm, 1, false, activeGenre);
-  }, 800); 
+  }, 500); 
 
   return () => clearTimeout(tracker);
 }, [searchTerm, activeGenre]);
@@ -124,7 +124,7 @@ useEffect(() => {
           </select>
         </div>
 
-        <div className="grid grid-cols-3 grid-rows-[200px_200px_200px_200px] lg:grid-rows-[270px_270px_270px_270px] gap-2 lg:h-[150vh] md:h-[800px] h-[120vh]">
+        <div className="grid grid-cols-3 grid-rows-[200px_200px_200px_200px] lg:grid-rows-[270px_270px_270px_270px] gap-2 lg:h-[150vh] md:h-[800px] h-[105vh]">
           {[
             { anime: seasonalAnime[3], span: "col-span-3" },
             { anime: seasonalAnime[1], span: "row-span-2" },
@@ -135,7 +135,7 @@ useEffect(() => {
             { anime: seasonalAnime[8], span: "" },
           ].map((item, index) => (
             <Link to={item.anime ? `/anime/${item.anime.mal_id}` : "#"} key={index} className={`${item.span} relative overflow-hidden group cursor-pointer block`}>
-              <img src={item.anime?.images?.jpg?.large_image_url} alt="Anime" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 group-hover:opacity-85" />
+              <img  src={item.anime?.images?.jpg?.large_image_url} alt="Anime" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 group-hover:opacity-85" />
               <div className="absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity">
                 <p className="font-['Kanit'] text-white text-[0.7rem] sm:text-xs md:text-lg font-bold uppercase truncate w-full">{item.anime?.title_english}</p>
               </div>
@@ -158,7 +158,7 @@ useEffect(() => {
           {filteredAnime.map((anime, idx) => (
             <Link to={`/anime/${anime.mal_id}`} key={`${anime.mal_id}-${idx}`} className="flex flex-col group">
               <div className="relative aspect-[2/3] border-1 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:shadow-none group-hover:translate-x-1 transition-all duration-700">
-                <img src={anime.images.jpg.image_url} alt={anime.title_english} className="w-full h-full object-cover" />
+                <img loading="lazy" src={anime.images.jpg.image_url} alt={anime.title_english} className="w-full h-full object-cover" />
                 <div className="absolute top-4 right-4 bg-black text-white px-3 py-1 text-[10px] font-bold">★ {anime.score || 'N/A'}</div>
               </div>
               <h2 className="mt-6 font-['Kanit'] text-[1.25rem] truncate">{anime.title_english || anime.title}</h2>

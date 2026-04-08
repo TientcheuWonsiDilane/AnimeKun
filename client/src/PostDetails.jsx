@@ -68,9 +68,9 @@ const PostDetails = ({ currentUser }) => {
         <h1 className="text-2xl lg:text-3xl font-black tracking-wider mb-4 leading-none">{post.title}</h1>
         <p className="text-xl leading-relaxed mb-3 text-gray-800">{post.content}</p>
         
-        <div className="flex flex-wrap gap-2 mb-12">
+        <div className="flex flex-wrap gap-2 mb-4">
           {post.tags.map(tag => (
-            <span key={tag} className="text-blue-500 px-3 py-1 font-black text-sm">
+            <span key={tag} className="text-blue-500 -px-1 py-1 font-black text-sm">
               #{tag}
             </span>
           ))}

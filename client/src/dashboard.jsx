@@ -72,7 +72,7 @@ const openEditModal = (post) => {
 
  
  const handleCreatePost = async () => {
-  if (!postData.title || !postData.content) return alert("Title and Content are required!");
+  if (!postData.title) return alert("Title is required!");
 
   try {
     const formattedData = {
@@ -258,11 +258,10 @@ const openEditModal = (post) => {
           <div className="space-y-4">
             {userPosts.length > 0 ? userPosts.map(p => (
               <div key={p._id} className="border-2 border-black p-4 flex justify-between items-center bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <Link to={`/post/${p._id}`}> { 
                 <div>
                   <h3 className="font-bold uppercase">{p.title}</h3>
                   <p className="text-xs text-gray-400">{new Date(p.createdAt).toDateString()}</p>
-                </div> }</Link>
+                </div> 
                 <div className="flex gap-3">
   <button 
     onClick={() => openEditModal(p)}
@@ -277,6 +276,12 @@ const openEditModal = (post) => {
   >
     Delete
   </button>
+
+  <Link to={`/post/${p._id}`}
+    className="text-green-500 font-black text-xs uppercase hover:underline"
+  >
+    View
+ </Link>
 </div>
               </div>
             )) : (
@@ -321,9 +326,9 @@ const openEditModal = (post) => {
 
       {showPostModal && (
         <div className="fixed inset-0 bg-black/90 z-[110] flex items-center justify-center p-4 backdrop-blur-md">
-          <div className="bg-white border-2 border-black w-full max-w-2xl p-8 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] max-h-[90vh] overflow-y-auto">
+          <div className="bg-white border-2 border-black w-full max-w-2xl p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="font-['Kanit'] text-3xl font-black uppercase italic">{editingPostId ? "Edit Discussion" : "Create Discussion"}</h2>
+              <h2 className="font-['Kanit'] text-2xl font-black uppercase italic">{editingPostId ? "Edit Post" : "Create Post"}</h2>
               <button onClick={() => { setShowPostModal(false); setEditingPostId(null); }}  className="hover:rotate-90 transition-transform">
                 <X size={32} />
               </button>
@@ -331,8 +336,8 @@ const openEditModal = (post) => {
 
             <div className="space-y-4">
               <input 
-                type="text" placeholder="POST TITLE" 
-                className="w-full border-2 border-black p-3 font-black uppercase text-lg outline-none focus:bg-yellow-50"
+                type="text" placeholder="Post Title" 
+                className="w-full border-2 border-black p-3 font-black text-lg outline-none focus:bg-yellow-50"
                 value={postData.title}
                 onChange={(e) => setPostData({...postData, title: e.target.value})}
               />
@@ -346,13 +351,13 @@ const openEditModal = (post) => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input 
-                  type="text" placeholder="TAGS (separated by commas)" 
+                  type="text" placeholder="Tags (separated by commas)" 
                   className="w-full border-2 border-black p-3 font-bold text-xs outline-none"
                   value={postData.tags}
                   onChange={(e) => setPostData({...postData, tags: e.target.value})}
                 />
                 <input 
-                  type="text" placeholder="ANIME REFERENCE (e.g. Blue Lock)" 
+                  type="text" placeholder="Anime Reference (e.g. Blue Lock)" 
                   className="w-full border-2 border-black p-3 font-bold text-xs outline-none"
                   value={postData.animeReference}
                   onChange={(e) => setPostData({...postData, animeReference: e.target.value})}
@@ -362,18 +367,18 @@ const openEditModal = (post) => {
               <div className="relative border-2 border-black border-dashed p-6 flex flex-col items-center bg-gray-50 group hover:bg-yellow-50/30 transition-all cursor-pointer">
                 <input type="file" onChange={handlePostImageUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
                 {postData.image ? (
-                  <img src={postData.image} className="h-32 w-full object-cover border-2 border-black" alt="Preview" />
+                  <img src={postData.image} className="max-h-[300px] w-full object-cover border-2 border-black" alt="Preview" />
                 ) : (
                   <>
                     <Camera className="mb-2" />
-                    <span className="text-xs font-black uppercase">{uploadingPostImg ? "Uploading..." : "Add a visual to your post"}</span>
+                    <span className="text-xs font-black">{uploadingPostImg ? "Uploading..." : "Add a visual to your post"}</span>
                   </>
                 )}
               </div>
 
               <button 
                 onClick={handleCreatePost}
-                className="w-full py-4 bg-black text-white font-black uppercase tracking-widest hover:bg-[#2ecc71] hover:text-black border-2 border-black transition-all"
+                className="w-full py-4 bg-black text-white font-black tracking-widest hover:bg-[#2ecc71] hover:text-black border-2 border-black transition-all"
               >
                 {editingPostId ? "Save Changes" : "Publish to Community"}
               </button>

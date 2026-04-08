@@ -10,6 +10,8 @@ import ProfileSetup from './profileSet.jsx';
 import Dashboard from './dashboard.jsx';
 import Community from './Community.jsx';
 import PostDetails from './PostDetails.jsx';
+import Voting from './voting.jsx';
+import VoteDetails from './voteDetails.jsx';
 
 
 
@@ -54,6 +56,8 @@ const App = () => {
               <Route path="/post/:id" element={<PostDetails currentUser={user} />} />
               <Route path="/anime/:id" element={<AnimeDetail user={user} setUser={setUser} />} />
               <Route path="/dashboard" element={<Dashboard user={user} setUser={setUser} />} />
+             <Route path="/voting" element={<Voting />} />
+             <Route path="/vote/:categoryId" element={<VoteDetails currentUser={user} />} />
             </Routes>
             <Footer />
           </>

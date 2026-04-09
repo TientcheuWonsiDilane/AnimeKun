@@ -17,28 +17,29 @@ import VoteDetails from './voteDetails.jsx';
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const [globalSearchTerm, setGlobalSearchTerm] = useState("");
+const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+useEffect(() => {
   const token = localStorage.getItem('token');
-  if (token && !user) {
+  if (token) {
     axios.get('https://animekun-production.up.railway.app/api/user/profile', {
       headers: { Authorization: `Bearer ${token}` }
-    }).then(res => {
+    })
+    .then(res => {
       setUser(res.data);
-    }).catch(() => {
+    })
+    .catch(() => {
       localStorage.removeItem('token');
+    })
+    .finally(() => {
+      setLoading(false); 
     });
+  } else {
+    setLoading(false);
   }
 }, []);
 
-  const handleLoginSuccess = (userData) => {
-    setUser(userData);
-  };
-
-  const handleGlobalSearch = (term) => {
-    setGlobalSearchTerm(term);
-  };
+if (loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
 
   return (
     <BrowserRouter>

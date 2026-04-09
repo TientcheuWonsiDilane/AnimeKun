@@ -30,7 +30,7 @@ app.post('/api/auth/google', async (req, res) => {
       headers: { Authorization: `Bearer ${token}` }
     });
 
-    const { email, name, picture } = googleResponse.data;
+    const { email, name, picture, sub } = googleResponse.data;
 
     let user = await User.findOne({ email });
     if (!user) {
@@ -38,6 +38,7 @@ app.post('/api/auth/google', async (req, res) => {
         email,
         username: name,
         avatar: picture,
+        googleId: sub,
         isProfileComplete: false
       });
       await user.save();

@@ -15,6 +15,15 @@ const login = useGoogleLogin({
         token: tokenResponse.access_token
       });
       
+      localStorage.setItem('token', res.data.token);
+      
+      onLoginSuccess(res.data.user);
+      
+      if (!res.data.user.isProfileComplete) {
+        navigate('/setup');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       console.error("Backend Auth Error:", err.response?.data);
     }

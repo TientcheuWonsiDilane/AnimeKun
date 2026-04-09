@@ -25,18 +25,14 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 app.post('/api/auth/google', async (req, res) => {
   const { access_token } = req.body;
 
-  if (!access_token) {
-    return res.status(400).json({ message: "Access token is required" });
-  }
-
   try {
-    const googleResponse = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
-      headers: { 
-        Authorization: `Bearer ${access_token}` 
-      }
+    const ticket = await client.verifyIdToken({
+      idToken: access_token,
+      audience: process.env.GOOGLE_CLIENT_ID, 
     });
-
-    const { email, name, picture } = googleResponse.data;
+    
+    const payload = ticket.getPayload();
+    const { email, name, picture } = payload;
 
     let user = await User.findOne({ email });
 
@@ -50,7 +46,6 @@ app.post('/api/auth/google', async (req, res) => {
       await user.save();
     }
 
-    // FIX: Include _id in the token payload
     const token = jwt.sign(
       { email: user.email, _id: user._id }, 
       process.env.JWT_SECRET, 
@@ -59,8 +54,8 @@ app.post('/api/auth/google', async (req, res) => {
 
     res.status(200).json({ token, user });
   } catch (error) {
-    console.error("Google Auth Error:", error.response?.data || error.message);
-    res.status(401).json({ message: "Invalid Google Access Token" });
+    console.error("Verification Error:", error.message);
+    res.status(401).json({ message: "Authentication Failed" });
   }
 });
 

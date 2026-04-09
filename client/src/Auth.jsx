@@ -8,29 +8,29 @@ import img from './assets/img1.jpg';
 const AuthPage = ({ mode, onLoginSuccess }) => {
   const navigate = useNavigate();
 
-  const login = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      try {
-        const res = await axios.post('https://animekun-production.up.railway.app/api/auth/google', { 
-          access_token: tokenResponse.access_token 
-        });
-        
-        localStorage.setItem('token', res.data.token);
-        onLoginSuccess(res.data.user);
-
-        await onLoginSuccess(res.data.user);
-        
-        if (!res.data.user.isProfileComplete) {
-          navigate('/setup');
-        } else {
-          navigate('/');
-        }
-      } catch (err) { 
-        console.error("Login Error:", err); 
+ const login = useGoogleLogin({
+  flow: 'implicit',
+  onSuccess: async (tokenResponse) => {
+    try {
+      const res = await axios.post("https://animekun-production.up.railway.app/api/auth/google", { 
+        token: tokenResponse.access_token 
+      });
+      
+      localStorage.setItem('token', res.data.token);
+      onLoginSuccess(res.data.user);
+      
+      if (!res.data.user.isProfileComplete) {
+        navigate('/setup');
+      } else {
+        navigate('/');
       }
-    },
-    onError: (error) => console.log('Login Failed:', error),
-  });
+    } catch (err) { 
+      console.error("Login Error:", err.response?.data || err.message); 
+    }
+  },
+  onError: (error) => console.log('Login Failed:', error),
+});
+
 
   return (
     <div className="flex h-screen w-full font-['Poppins']">
@@ -58,7 +58,7 @@ const AuthPage = ({ mode, onLoginSuccess }) => {
           <img 
             src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" 
             alt="G" 
-            className="w-8 h-8" 
+            className="w-8 h-8 bg-white" 
           />
           {mode === 'login' ? 'Sign in with Google' : 'Sign up with Google'}
         </button>

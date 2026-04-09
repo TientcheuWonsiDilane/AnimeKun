@@ -17,7 +17,7 @@ import VoteDetails from './voteDetails.jsx';
 
 const App = () => {
   const [user, setUser] = useState(null);
-const [loading, setLoading] = useState(true);
+  const [globalSearchTerm, setGlobalSearchTerm] = useState("");
 
 useEffect(() => {
   const token = localStorage.getItem('token');
@@ -39,7 +39,13 @@ useEffect(() => {
   }
 }, []);
 
-if (loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
+  const handleLoginSuccess = (userData) => {
+    setUser(userData);
+  };
+
+  const handleGlobalSearch = (term) => {
+    setGlobalSearchTerm(term);
+  };
 
   return (
     <BrowserRouter>

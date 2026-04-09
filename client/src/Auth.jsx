@@ -17,6 +17,8 @@ const AuthPage = ({ mode, onLoginSuccess }) => {
         
         localStorage.setItem('token', res.data.token);
         onLoginSuccess(res.data.user);
+
+        await onLoginSuccess(res.data.user);
         
         if (!res.data.user.isProfileComplete) {
           navigate('/setup');

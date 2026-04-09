@@ -35,7 +35,7 @@ const ProfileSetup = ({ user, onComplete }) => {
 
   const handleSubmit = async () => {
     try {
-      const res = await axios.put('http://localhost:5000/api/auth/update-profile', 
+      const res = await axios.put('https://animekun-production.up.railway.app/api/auth/update-profile', 
         { username, avatar },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
       );

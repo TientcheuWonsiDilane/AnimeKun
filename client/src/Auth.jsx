@@ -11,7 +11,7 @@ const AuthPage = ({ mode, onLoginSuccess }) => {
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        const res = await axios.post('http://localhost:5000/api/auth/google', { 
+        const res = await axios.post('https://animekun-production.up.railway.app/api/auth/google', { 
           access_token: tokenResponse.access_token 
         });
         

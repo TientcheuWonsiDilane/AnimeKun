@@ -11,7 +11,7 @@ const PostDetails = ({ currentUser }) => {
 
   useEffect(() => {
     const fetchPost = async () => {
-      const res = await axios.get(`http://localhost:5000/api/posts/${id}`);
+      const res = await axios.get(`https://animekun-production.up.railway.app/api/posts/${id}`);
       setPost(res.data);
     };
     fetchPost();
@@ -25,7 +25,7 @@ const PostDetails = ({ currentUser }) => {
     if (!currentUser){ return alert("You must be logged in to comment!");}
 
     try {
-      const res = await axios.post(`http://localhost:5000/api/posts/${id}/comments`, 
+      const res = await axios.post(`https://animekun-production.up.railway.app/api/posts/${id}/comments`, 
         { text, parentCommentId: parentId },
         { headers: { Authorization: `Bearer ${token}` }}
       );

@@ -19,7 +19,7 @@ import { VOTING_CATEGORIES, CATEGORY_CONFIG, MAL_BASE_IMAGE, MAL_BASE_CHAR } fro
 
   const fetchAndMergeData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/votes/${currentId}`);
+      const res = await axios.get(`https://animekun-production.up.railway.app/api/votes/${currentId}`);
       const backendVotes = res.data;
 
       const localData = VOTING_CATEGORIES[currentId] || [];
@@ -67,7 +67,7 @@ import { VOTING_CATEGORIES, CATEGORY_CONFIG, MAL_BASE_IMAGE, MAL_BASE_CHAR } fro
     if (pointsLeft <= 0) return alert("No points left!");
 
     try {
-      const res = await axios.post('http://localhost:5000/api/vote', {
+      const res = await axios.post('https://animekun-production.up.railway.app/api/vote', {
         animeId: id,
         userId: currentUser._id,
         categoryId: currentId

@@ -26,7 +26,7 @@ const AnimeDetail = ({ user, setUser }) => {
   const toggleList = async (listType) => {
     if (!user) return alert("Please login first");
     try {
-      const res = await axios.post('http://localhost:5000/api/user/toggle-list', 
+      const res = await axios.post('https://animekun-production.up.railway.app/api/user/toggle-list', 
         { anime, listType },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
       );

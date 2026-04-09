@@ -25,7 +25,7 @@ const Dashboard = ({ user, setUser }) => {
     const fetchUserPosts = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/api/posts/my-posts', {
+      const res = await axios.get('https://animekun-production.up.railway.app/api/posts/my-posts', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUserPosts(res.data);
@@ -48,7 +48,7 @@ const handleDeletePost = async (postId) => {
   if (!window.confirm("Are you sure you want to delete this post? This action is permanent.")) return;
 
   try {
-    await axios.delete(`http://localhost:5000/api/posts/${postId}`, {
+    await axios.delete(`https://animekun-production.up.railway.app/api/posts/${postId}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     });
     setUserPosts(userPosts.filter(p => p._id !== postId)); 
@@ -83,12 +83,12 @@ const openEditModal = (post) => {
     const token = localStorage.getItem('token');
     
     if (editingPostId) {
-      await axios.put(`http://localhost:5000/api/posts/${editingPostId}`, formattedData, {
+      await axios.put(`https://animekun-production.up.railway.app/api/posts/${editingPostId}`, formattedData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert("Post updated!");
     } else {
-      await axios.post('http://localhost:5000/api/posts', formattedData, {
+      await axios.post('https://animekun-production.up.railway.app/api/posts', formattedData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert("Post published!");
@@ -119,7 +119,7 @@ const openEditModal = (post) => {
 
   const toggleList = async (anime, listType) => {
     try {
-      const res = await axios.post('http://localhost:5000/api/user/toggle-list', 
+      const res = await axios.post('https://animekun-production.up.railway.app/api/user/toggle-list', 
         { anime, listType },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
       );
@@ -129,7 +129,7 @@ const openEditModal = (post) => {
 
   const toggleWatched = async (animeId) => {
     try {
-      const res = await axios.post('http://localhost:5000/api/user/toggle-watched', 
+      const res = await axios.post('https://animekun-production.up.railway.app/api/user/toggle-watched', 
         { animeId },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
       );
@@ -154,7 +154,7 @@ const openEditModal = (post) => {
 
   const updateProfile = async (username, avatarUrl) => {
     try {
-      const res = await axios.put('http://localhost:5000/api/auth/update-profile', 
+      const res = await axios.put('https://animekun-production.up.railway.app/api/auth/update-profile', 
         { username, avatar: avatarUrl || user.avatar },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
       );

@@ -14,7 +14,7 @@ const Voting = () => {
   useEffect(() => {
     const fetchAllVotes = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/all-votes');
+        const res = await axios.get('https://animekun-production.up.railway.app/api/all-votes');
         setBackendData(res.data);
         setLoading(false);
       } catch (err) {

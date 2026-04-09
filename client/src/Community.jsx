@@ -8,7 +8,7 @@ const Community = ({ user }) => {
   const [search, setSearch] = useState("");
 
   const fetchPosts = async () => {
-    const res = await axios.get(`http://localhost:5000/api/posts?q=${search}`);
+    const res = await axios.get(`https://animekun-production.up.railway.app/api/posts?q=${search}`);
     setPosts(res.data);
   };
 
@@ -17,7 +17,7 @@ const Community = ({ user }) => {
 }, []);
   const handleReact = async (postId, type) => {
     try {
-      await axios.post(`http://localhost:5000/api/posts/${postId}/react`, { type }, {
+      await axios.post(`https://animekun-production.up.railway.app/api/posts/${postId}/react`, { type }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       fetchPosts();

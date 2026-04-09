@@ -22,7 +22,7 @@ const App = () => {
   useEffect(() => {
   const token = localStorage.getItem('token');
   if (token && !user) {
-    axios.get('http://localhost:5000/api/user/profile', {
+    axios.get('https://animekun-production.up.railway.app/api/user/profile', {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => {
       setUser(res.data);

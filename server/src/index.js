@@ -11,7 +11,10 @@ const Anime = require('./models/Anime');
 const mongoose = require('mongoose');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://animekun.up.railway.app/'],
+  credentials: true
+}));
 app.use(express.json());
 
 connectDB();

@@ -99,7 +99,7 @@ import { VOTING_CATEGORIES, CATEGORY_CONFIG, MAL_BASE_IMAGE, MAL_BASE_CHAR } fro
         className="relative pt-32 pb-40 text-center bg-black text-white overflow-hidden mb-10 h-[60vh] lg:h-[70vh]"
         style={{ 
           clipPath: 'polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%)',
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(${getImgUrl(animes[0].img)})`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(${getImgUrl(animes[0].img)})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
@@ -130,21 +130,21 @@ import { VOTING_CATEGORIES, CATEGORY_CONFIG, MAL_BASE_IMAGE, MAL_BASE_CHAR } fro
 
           if (isTop3) {
             return (
-                <div key={anime.id} className="block group">
-              <div className="relative h-70 items-center border-2 rounded-lg border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-gray-900 overflow-visible transition-all">
+                <div key={anime.id} className="block group" >
+              <div className="relative h-70 w-[97%] items-center border-2 rounded-lg border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-gray-900 overflow-visible transition-all">
                 
                 <div className="absolute inset-0 z-0">
-                  <img src={getImgUrl(anime.img)} loading="lazy" className="w-full h-full object-cover opacity-60 transition-all duration-500" alt="" />
+                  <img src={getImgUrl(anime.img)} loading="lazy" className="w-full h-full object-cover opacity-80 transition-all duration-500" alt="" />
                   <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
                 </div>
 
                 <img 
                   src={getCharUrl(anime.chars[0])} 
-                  className="absolute -left-1 w-[50%] bottom-0 h-[110%] lg:h-[140%] lg:w-[25%] object-cover z-20 border-t-2 border-l-2 rounded-lg border-r-2 border-b-1 border-black transition-all duration-500 group-hover:scale-105" 
+                  className="absolute -left-1 w-[45%] bottom-0 h-[110%] lg:h-[140%] lg:w-[25%] object-cover z-20 border-t-2 border-l-2 rounded-lg border-r-2 border-b-1 border-black transition-all duration-500 group-hover:scale-105" 
                   alt=""
                 />
 
-                <div className="relative z-10 flex flex-col justify-center align-center h-full pl-48 md:pl-80 gap-2 pt-4 pb-4">
+                <div className="relative z-10 flex flex-col justify-center align-center h-full pl-56 md:pl-80 gap-2 pt-2 pb-4">
                   <div className="flex justify-between items-center w-full">
                     <div>
                       <h3 className="text-yellow-400 font-black text-5xl tracking-widest mb-1 italic">#{index + 1}</h3>
@@ -183,17 +183,17 @@ import { VOTING_CATEGORIES, CATEGORY_CONFIG, MAL_BASE_IMAGE, MAL_BASE_CHAR } fro
               <div className="relative lg:h-64 h-60 pt-4 pb-4 items-center border-2 rounded-lg border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-gray-900 overflow-visible transition-all">
                 
                 <div className="absolute inset-0 z-0">
-                  <img src={getImgUrl(anime.img)} className="w-full h-full object-cover opacity-60 transition-all duration-500" alt="" />
+                  <img src={getImgUrl(anime.img)} className="w-full h-full object-cover opacity-80 transition-all duration-500" alt="" />
                   <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
                 </div>
 
                 <img 
                   src={getCharUrl(anime.chars[0])} 
-                  className="absolute -left-1 w-[50%] bottom-0 h-[110%] lg:h-[120%] lg:w-[20%] object-cover z-20 border-t-2 border-l-2 rounded-lg border-r-2 border-b-1 border-black transition-all duration-500 group-hover:scale-105" 
+                  className="absolute -left-1 w-[45%] bottom-0 h-[110%] lg:h-[120%] lg:w-[20%] object-cover z-20 border-t-2 border-l-2 rounded-lg border-r-2 border-b-1 border-black transition-all duration-500 group-hover:scale-105" 
                   alt=""
                 />
 
-                <div className="relative z-10 flex flex-col justify-center align-center h-full pl-48 md:pl-68 gap-2">
+                <div className="relative z-10 flex flex-col justify-center align-center h-full pl-44 md:pl-68 gap-2">
                   <div className="flex justify-between items-center w-full">
                     <div>
                       <h3 className="text-yellow-400 font-black text-xs tracking-widest mb-1 italic">

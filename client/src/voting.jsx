@@ -62,7 +62,7 @@ const Voting = () => {
         className="relative pt-32 pb-40 text-center bg-black text-white overflow-hidden mb-10 h-[60vh] lg:h-[70vh]"
         style={{ 
           clipPath: 'polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%)',
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(https://www.tvguide.com/a/img/resize/6a1b0ca1f2b2d682a4e6d22b8380422a4adac7fa/hub/2026/04/02/893315af-834e-464b-906a-476bbb8f2199/260402-animeawards-collage.jpg?auto=webp&width=1092)`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(https://www.tvguide.com/a/img/resize/6a1b0ca1f2b2d682a4e6d22b8380422a4adac7fa/hub/2026/04/02/893315af-834e-464b-906a-476bbb8f2199/260402-animeawards-collage.jpg?auto=webp&width=1092)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
@@ -95,7 +95,7 @@ const Voting = () => {
                 
                 <div className="absolute inset-0 z-0">
                   {winner && (
-                    <img src={getImgUrl(winner.img)} className="w-full h-full object-cover opacity-60 lg:grayscale group-hover:grayscale-0 transition-all duration-500" alt="" />
+                    <img src={getImgUrl(winner.img)} className="w-full h-full object-cover opacity-80 lg:grayscale group-hover:grayscale-0 transition-all duration-500" alt="" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
                 </div>

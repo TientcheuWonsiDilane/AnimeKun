@@ -140,7 +140,7 @@ import { VOTING_CATEGORIES, CATEGORY_CONFIG, MAL_BASE_IMAGE, MAL_BASE_CHAR } fro
 
                 <img 
                   src={getCharUrl(anime.chars[0])} 
-                  className="absolute -left-1 w-[45%] bottom-0 h-[110%] lg:h-[140%] lg:w-[25%] object-cover z-20 border-t-2 border-l-2 rounded-lg border-r-2 border-b-1 border-black transition-all duration-500 group-hover:scale-105" 
+                  className="absolute -left-1 w-[47%] bottom-0 h-[110%] lg:h-[140%] lg:w-[25%] object-cover z-20 border-t-2 border-l-2 rounded-lg border-r-2 border-b-1 border-black transition-all duration-500 group-hover:scale-105" 
                   alt=""
                 />
 
@@ -180,7 +180,7 @@ import { VOTING_CATEGORIES, CATEGORY_CONFIG, MAL_BASE_IMAGE, MAL_BASE_CHAR } fro
 
           return (
             <div key={anime.id} className="block group">
-              <div className="relative lg:h-64 h-60 pt-4 pb-4 items-center border-2 rounded-lg border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-gray-900 overflow-visible transition-all">
+              <div className="relative lg:h-64 h-56 w-[97%] pt-4 pb-4 items-center border-2 rounded-lg border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-gray-900 overflow-visible transition-all">
                 
                 <div className="absolute inset-0 z-0">
                   <img src={getImgUrl(anime.img)} className="w-full h-full object-cover opacity-80 transition-all duration-500" alt="" />
@@ -189,11 +189,11 @@ import { VOTING_CATEGORIES, CATEGORY_CONFIG, MAL_BASE_IMAGE, MAL_BASE_CHAR } fro
 
                 <img 
                   src={getCharUrl(anime.chars[0])} 
-                  className="absolute -left-1 w-[45%] bottom-0 h-[110%] lg:h-[120%] lg:w-[20%] object-cover z-20 border-t-2 border-l-2 rounded-lg border-r-2 border-b-1 border-black transition-all duration-500 group-hover:scale-105" 
+                  className="absolute -left-1 w-[47%] bottom-0 h-[110%] lg:h-[120%] lg:w-[20%] object-cover z-20 border-t-2 border-l-2 rounded-lg border-r-2 border-b-1 border-black transition-all duration-500 group-hover:scale-105" 
                   alt=""
                 />
 
-                <div className="relative z-10 flex flex-col justify-center align-center h-full pl-44 md:pl-68 gap-2">
+                <div className="relative z-10 flex flex-col justify-center align-center h-full pl-56 md:pl-68 gap-2">
                   <div className="flex justify-between items-center w-full">
                     <div>
                       <h3 className="text-yellow-400 font-black text-xs tracking-widest mb-1 italic">
@@ -234,8 +234,8 @@ import { VOTING_CATEGORIES, CATEGORY_CONFIG, MAL_BASE_IMAGE, MAL_BASE_CHAR } fro
         {selectedAnime && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedAnime(null)} className="absolute inset-0 bg-black/90 backdrop-blur-md" />
-            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }} className="relative bg-white w-full max-w-md overflow-hidden z-20" style={{ clipPath: "polygon(0 0, 100% 0, 100% 92%, 92% 100%, 0 100%)" }}>
-              <img src={getImgUrl(selectedAnime.img)} className="w-full h-[400px] lg:h-[500px] object-cover" alt="" />
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }} className="relative bg-white w-[90%] max-w-md overflow-hidden z-20" style={{ clipPath: "polygon(0 0, 100% 0, 100% 92%, 92% 100%, 0 100%)" }}>
+              <img src={getImgUrl(selectedAnime.img)} className="w-full h-[405px] lg:h-[500px] object-cover" alt="" />
               <div className="p-8 bg-black text-white">
                 <h2 className="text-xl lg:text-3xl  font-black italic leading-none">{selectedAnime.name}</h2>
                 <button onClick={() => handleFinalVote(selectedAnime.id)} className="w-full active:bg-white hover:bg-white mt-6 bg-yellow-400 text-black font-black py-4 skew-x-[-9deg] italic transition-colors duration-500">Confirm Vote</button>

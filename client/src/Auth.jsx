@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from './assets/logo1.png';
 import img from './assets/img1.jpg'; 
-import { useGoogleLogin } from '@react-oauth/google';
 
 const AuthPage = ({ mode, onLoginSuccess }) => {
   const navigate = useNavigate();

@@ -4,31 +4,22 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from './assets/logo1.png';
 import img from './assets/img1.jpg'; 
+import { useGoogleLogin } from '@react-oauth/google';
 
 const AuthPage = ({ mode, onLoginSuccess }) => {
   const navigate = useNavigate();
 
- const login = useGoogleLogin({
-  flow: 'implicit',
+const login = useGoogleLogin({
   onSuccess: async (tokenResponse) => {
     try {
       const res = await axios.post("https://animekun-production.up.railway.app/api/auth/google", { 
-        token: tokenResponse.access_token 
+        token: tokenResponse.access_token
       });
       
-      localStorage.setItem('token', res.data.token);
-      onLoginSuccess(res.data.user);
-      
-      if (!res.data.user.isProfileComplete) {
-        navigate('/setup');
-      } else {
-        navigate('/');
-      }
-    } catch (err) { 
-      console.error("Login Error:", err.response?.data || err.message); 
+    } catch (err) {
+      console.error("Backend Auth Error:", err.response?.data);
     }
   },
-  onError: (error) => console.log('Login Failed:', error),
 });
 
 

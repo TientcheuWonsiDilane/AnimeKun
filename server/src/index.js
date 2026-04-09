@@ -23,19 +23,16 @@ connectDB();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 app.post('/api/auth/google', async (req, res) => {
-  const { access_token } = req.body;
+  const { token } = req.body;
 
   try {
-    const ticket = await client.verifyIdToken({
-      idToken: access_token,
-      audience: process.env.GOOGLE_CLIENT_ID, 
+    const googleResponse = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${token}` }
     });
-    
-    const payload = ticket.getPayload();
-    const { email, name, picture } = payload;
+
+    const { email, name, picture } = googleResponse.data;
 
     let user = await User.findOne({ email });
-
     if (!user) {
       user = new User({
         email,
@@ -46,16 +43,16 @@ app.post('/api/auth/google', async (req, res) => {
       await user.save();
     }
 
-    const token = jwt.sign(
+    const jwtToken = jwt.sign(
       { email: user.email, _id: user._id }, 
       process.env.JWT_SECRET, 
       { expiresIn: '1d' }
     );
 
-    res.status(200).json({ token, user });
+    res.status(200).json({ token: jwtToken, user });
   } catch (error) {
-    console.error("Verification Error:", error.message);
-    res.status(401).json({ message: "Authentication Failed" });
+    console.error("Google API Error:", error.response?.data || error.message);
+    res.status(401).json({ message: "Invalid Google Token", details: error.message });
   }
 });
 

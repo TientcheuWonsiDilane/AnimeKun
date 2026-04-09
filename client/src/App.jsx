@@ -18,6 +18,7 @@ import VoteDetails from './voteDetails.jsx';
 const App = () => {
   const [user, setUser] = useState(null);
   const [globalSearchTerm, setGlobalSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true); // Add a loading state
 
 useEffect(() => {
   const token = localStorage.getItem('token');
@@ -32,7 +33,7 @@ useEffect(() => {
       localStorage.removeItem('token');
     })
     .finally(() => {
-      setLoading(false); 
+      setLoading(false);
     });
   } else {
     setLoading(false);

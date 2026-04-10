@@ -172,7 +172,7 @@ const openEditModal = (post) => {
 
   return (
     <div className="min-h-screen bg-white font-['Poppins']">
-      <div className="relative h-screen w-full overflow-hidden">
+      <div className="relative h-[90vh] lg:h-screen w-full overflow-hidden">
         <img src={img2} className="absolute inset-0 w-full h-full object-cover opacity-90" alt="Background" />
         <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-6">
           <img src={user.avatar} className="w-32 h-32 p-0.25 md:w-40 md:h-40 rounded-full border-2 border-white shadow-2xl mb-4 object-cover" alt="Avatar" />

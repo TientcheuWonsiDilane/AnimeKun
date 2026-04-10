@@ -42,7 +42,7 @@ const AnimeDetail = ({ user, setUser }) => {
     <div className="min-h-screen bg-[#fcfcfc] text-black font-['Poppins']">
       <div className="flex flex-col lg:flex-row">
         <div className="w-full lg:w-1/3 lg:h-screen lg:sticky lg:top-6 p-0 lg:p-10">
-          <div className="relative w-full h-screen lg:h-full border-b-3 lg:border-3 border-black overflow-hidden">
+          <div className="relative w-full h-[90vh] lg:h-full border-b-3 lg:border-3 border-black overflow-hidden">
             <img src={anime.images.jpg.large_image_url} alt={anime.title_english} className="w-full h-full object-cover" />
             <div className="absolute bottom-0 w-full p-6 bg-gradient-to-t from-black via-black/40 to-transparent flex flex-row gap-3">
               <button 
